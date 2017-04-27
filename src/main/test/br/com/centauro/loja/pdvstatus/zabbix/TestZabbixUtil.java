@@ -1,4 +1,4 @@
-package br.com.centauro.loja.satstatus.zabbix;
+package br.com.centauro.loja.pdvstatus.zabbix;
 
 import java.util.Properties;
 
