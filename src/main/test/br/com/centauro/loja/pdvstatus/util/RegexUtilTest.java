@@ -23,31 +23,37 @@ public class RegexUtilTest {
 		assertTrue(RegexUtil.isValidIp(ip3));
 		assertTrue(RegexUtil.isValidIp(ip4));
 		assertTrue(RegexUtil.isValidIp(ip5));
-		assertTrue(RegexUtil.isValidIp(ip6));
+		assertFalse(RegexUtil.isValidIp(ip6));
 
 	}
 
 	@Test
 	public void testIsEthernetInterface() {
-		String et1 = "enp3s0";
-		String et2 = "enpXs4654";
-		String et3 = "enp000s000";
-		String et4 = "enp12s45";
-		String et5 = "Aenp3s0";
-		String et6 = "0enp3s0";
-		String et7 = "enps0";
-		String et8 = "enp3AsA0";
-		String et9 = "enpp3s0s";
-		String et10 = "enp30s10";
-		System.out.println(et1 + ": " + RegexUtil.isEthernetInterface(et1));
-		System.out.println(et2 + ": " + RegexUtil.isEthernetInterface(et2));
-		System.out.println(et3 + ": " + RegexUtil.isEthernetInterface(et3));
-		System.out.println(et4 + ": " + RegexUtil.isEthernetInterface(et4));
-		System.out.println(et5 + ": " + RegexUtil.isEthernetInterface(et5));
-		System.out.println(et6 + ": " + RegexUtil.isEthernetInterface(et6));
-		System.out.println(et7 + ": " + RegexUtil.isEthernetInterface(et7));
-		System.out.println(et8 + ": " + RegexUtil.isEthernetInterface(et8));
-		System.out.println(et9 + ": " + RegexUtil.isEthernetInterface(et9));
-		System.out.println(et10 + ": " + RegexUtil.isEthernetInterface(et10));
+		String et1 = "enp3s0"; // true
+		String et2 = "enpXs4654"; // false
+		String et3 = "enp000s000"; // true
+		String et4 = "enp12s45"; // true
+		String et5 = "Aenp3s0"; // false
+		String et6 = "0enp3s0"; // false
+		String et7 = "enps0"; // false
+		String et8 = "enp3AsA0"; // false
+		String et9 = "enpp3s0s"; // false
+		String et10 = "enp30s10"; // true
+
+		/**
+		 * Validando a mascara de Interface Ethernet
+		 */
+
+		assertTrue(RegexUtil.isEthernetInterface(et1));
+		assertFalse(RegexUtil.isEthernetInterface(et2));
+		assertTrue(RegexUtil.isEthernetInterface(et3));
+		assertTrue(RegexUtil.isEthernetInterface(et4));
+		assertFalse(RegexUtil.isEthernetInterface(et5));
+		assertFalse(RegexUtil.isEthernetInterface(et6));
+		assertFalse(RegexUtil.isEthernetInterface(et7));
+		assertFalse(RegexUtil.isEthernetInterface(et8));
+		assertFalse(RegexUtil.isEthernetInterface(et9));
+		assertTrue(RegexUtil.isEthernetInterface(et10));
+
 	}
 }
