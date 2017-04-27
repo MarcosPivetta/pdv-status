@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.centauro.loja.pdvstatus.model.PdvStatus;
-import br.com.centauro.loja.pdvstatus.type.SatStatusEnum;
 
 /**
  * Classe utilitária utilizada para enviar informações pelo zabbix_sender
@@ -26,7 +25,7 @@ public abstract class ZabbixUtil {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(ZabbixUtil.class);
 
-	private static final String SAT = "SAT";
+	private static final String PDV = "PDV";
 	private static final String ASPAS = "\"";
 	private static final String LF = "\n";
 	private static final SimpleDateFormat SDF_DATE_TIME = new SimpleDateFormat("yyyyMMddHHmmssSSS");
@@ -65,51 +64,14 @@ public abstract class ZabbixUtil {
 	 * @param satStatusObj Objeto PdvStatus, contendo as informações obtidas do SAT
 	 * @param satProperties Arquivo de properties, com as configurações
 	 */
-	public static void saveZabbixFile(final PdvStatus satStatusObj, final Properties satProperties) {
+	public static void saveZabbixFile(final PdvStatus pdvStatusObj, final Properties pdvProperties) {
 		LOGGER.info("Gerando arquivo...");
 		try {
-			final String PRFX = SAT+satStatusObj.getNumeroSerie();
+			final String PRFX = PDV+pdvStatusObj.getHostaname();
 			
-			String memoriaTotal = satStatusObj.getMemoriaTotal();
-			if(memoriaTotal != null && !"".equals(memoriaTotal)) {
-				memoriaTotal = memoriaTotal.split(" ")[0];
-			}
-			
-			String memoriaUsada = satStatusObj.getMemoriaUsada();
-			if(memoriaUsada != null && !"".equals(memoriaUsada)) {
-				memoriaUsada = memoriaUsada.split(" ")[0];
-			}
-    		
     		StringBuilder content = new StringBuilder()
-    				.append(PRFX).append(" ").append("dataHoraStatus ").append(satStatusObj.getDataHoraStatus().getTimeInMillis()/1000).append(LF)
-    				.append(PRFX).append(" ").append("codigoEeeee ").append(satStatusObj.getCodigoEeeee()).append(LF)
-    				.append(PRFX).append(" ").append("mensagem ").append(ASPAS).append(satStatusObj.getMensagem()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("cod ").append(ASPAS).append(satStatusObj.getCod()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("mensagemSefaz ").append(ASPAS).append(satStatusObj.getMensagemSefaz()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("numeroSerie ").append(satStatusObj.getNumeroSerie()).append(LF)
-    				.append(PRFX).append(" ").append("codAtivacao ").append(satProperties.getProperty("codigoAtivacao", "")).append(LF)
-    				.append(PRFX).append(" ").append("tipoLan ").append(ASPAS).append(satStatusObj.getTipoLan()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("lanIp ").append(satStatusObj.getLanIp()).append(LF)
-    				.append(PRFX).append(" ").append("lanMac ").append(satStatusObj.getLanMac()).append(LF)
-    				.append(PRFX).append(" ").append("lanMask ").append(satStatusObj.getLanMask()).append(LF)
-    				.append(PRFX).append(" ").append("lanGw ").append(satStatusObj.getLanGw()).append(LF)
-    				.append(PRFX).append(" ").append("lanDns1 ").append(satStatusObj.getLanDns1()).append(LF)
-    				.append(PRFX).append(" ").append("lanDns2 ").append(satStatusObj.getLanDns2()).append(LF)
-    				.append(PRFX).append(" ").append("statusLan ").append(ASPAS).append(satStatusObj.getStatusLan()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("nivelBateria ").append(ASPAS).append(satStatusObj.getNivelBateria()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("memoriaTotal ").append(ASPAS).append(memoriaTotal).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("memoriaUsada ").append(ASPAS).append(memoriaUsada).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("dataHoraAtual ").append(satStatusObj.getDataHoraAtual().getTimeInMillis()/1000).append(LF)
-    				.append(PRFX).append(" ").append("versaoSoftBasico ").append(ASPAS).append(satStatusObj.getVersaoSoftBasico()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("versaoLayout ").append(ASPAS).append(satStatusObj.getVersaoLayout()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("ultimoCfeSat ").append(ASPAS).append(satStatusObj.getUltimoCfeSat()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("listaInicial ").append(ASPAS).append(satStatusObj.getListaInicial()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("listaFinal ").append(ASPAS).append(satStatusObj.getListaFinal()).append(ASPAS).append(LF)
-    				.append(PRFX).append(" ").append("dataHoraCfe ").append(satStatusObj.getDataHoraCfe().getTimeInMillis()/1000).append(LF)
-    				.append(PRFX).append(" ").append("dataHoraUltima ").append(satStatusObj.getDataHoraUltima().getTimeInMillis()/1000).append(LF)
-    				.append(PRFX).append(" ").append("dataEmissaoCertificado ").append(satStatusObj.getDataEmissaoCertificado().getTimeInMillis()/1000).append(LF)
-    				.append(PRFX).append(" ").append("dataVencimentoCertificado ").append(satStatusObj.getDataVencimentoCertificado().getTimeInMillis()/1000).append(LF)
-    				.append(PRFX).append(" ").append("estadoOperacao ").append(ASPAS).append(SatStatusEnum.fromInt(Integer.parseInt(satStatusObj.getEstadoOperacao())).toString()).append(ASPAS).append(LF)
+    				.append(PRFX).append(" ").append("Ip ").append(pdvStatusObj.getIp()).append(LF)
+    				.append(PRFX).append(" ").append("Hostaname ").append(pdvStatusObj.getHostaname()).append(LF)
     				;
     
     		String absolutePath = writeFile(content);

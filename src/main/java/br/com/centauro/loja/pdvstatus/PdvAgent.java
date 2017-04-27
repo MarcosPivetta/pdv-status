@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
  * @author juliano.freitas
  *
  */
-public class PdvStatus {
+public class PdvAgent {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(PdvStatus.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(PdvAgent.class);
 
 	private static final SimpleDateFormat SDF_YYMMDDHHMMSSSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
@@ -30,9 +30,8 @@ public class PdvStatus {
 	public static void main(String[] args) {
 
 		LOGGER.info("Inicializando...");
-
 		testNetwork();
-
+		hostname();
 		// Obter as informações do PDV
 		// IP
 		// Hostname
@@ -53,7 +52,6 @@ public class PdvStatus {
 
 		// Enviar o status do pdv para o zabbix (usar classe ZabbixUtil
 	}
-
 	public static void testNetwork() {
 		try {
 			System.out.println("Your Host addr: " + InetAddress.getLocalHost().getHostAddress());
@@ -90,8 +88,18 @@ public class PdvStatus {
 			// undetermined.
 			System.out.println(hostname);
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	}
+
+	public static String hostname() {
+			String hostname = "";
+			try {
+				hostname = InetAddress.getLocalHost().getHostName();
+				System.out.println(hostname);
+			} catch (UnknownHostException e) {
+				// failed; try alternate means.
+			}
+			return hostname;
 	}
 }
