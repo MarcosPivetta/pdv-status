@@ -27,4 +27,27 @@ public class RegexUtilTest {
 
 	}
 
+	@Test
+	public void testIsEthernetInterface() {
+		String et1 = "enp3s0";
+		String et2 = "enpXs4654";
+		String et3 = "enp000s000";
+		String et4 = "enp12s45";
+		String et5 = "Aenp3s0";
+		String et6 = "0enp3s0";
+		String et7 = "enps0";
+		String et8 = "enp3AsA0";
+		String et9 = "enpp3s0s";
+		String et10 = "enp30s10";
+		System.out.println(et1 + ": " + RegexUtil.isEthernetInterface(et1));
+		System.out.println(et2 + ": " + RegexUtil.isEthernetInterface(et2));
+		System.out.println(et3 + ": " + RegexUtil.isEthernetInterface(et3));
+		System.out.println(et4 + ": " + RegexUtil.isEthernetInterface(et4));
+		System.out.println(et5 + ": " + RegexUtil.isEthernetInterface(et5));
+		System.out.println(et6 + ": " + RegexUtil.isEthernetInterface(et6));
+		System.out.println(et7 + ": " + RegexUtil.isEthernetInterface(et7));
+		System.out.println(et8 + ": " + RegexUtil.isEthernetInterface(et8));
+		System.out.println(et9 + ": " + RegexUtil.isEthernetInterface(et9));
+		System.out.println(et10 + ": " + RegexUtil.isEthernetInterface(et10));
+	}
 }
