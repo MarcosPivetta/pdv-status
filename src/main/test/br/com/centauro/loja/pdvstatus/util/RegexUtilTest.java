@@ -36,14 +36,14 @@ public class RegexUtilTest {
 	}
 
 	@Test
-	public void testIs() {
+	public void testIsEthernetInterface() {
 		String et1 = "enp3s0";
 		String et2 = "enpXs4654";
 		String et3 = "enp000s000";
 		String et4 = "enp12s45";
 		String et5 = "Aenp3s0";
 		String et6 = "0enp3s0";
-		String et7 = "*enp3s0";
+		String et7 = "enps0";
 		String et8 = "enp3AsA0";
 		String et9 = "enpp3s0s";
 		String et10 = "enp30s10";
