@@ -25,27 +25,26 @@ public class PdvAgent {
 
 	private static final SimpleDateFormat SDF_YYMMDDHHMMSSSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 	
-	private static Properties application;
+	public static final Properties APPLICATION;
 	
 	static {
-		application = new Properties();
+		APPLICATION = new Properties();
 
 		try {
 			InputStream is = new PdvAgent().getClass()
 					.getResourceAsStream("/META-INF/maven/br.com.centauro.loja/pdv-status/pom.properties");
-			application = new Properties();
 
 	        if (is != null) {
-	        	application.load(is);
+	        	APPLICATION.load(is);
 	        }
 	        
 			is.close();
 		} catch (FileNotFoundException e) {
 			LOGGER.error("Arquivo nao encontrado [application.properties]", e);
-			application.clear();
+			APPLICATION.clear();
 		} catch (Exception e) {
 			LOGGER.error("Exception", e);
-			application.clear();
+			APPLICATION.clear();
 		}
 	}
 
@@ -58,9 +57,9 @@ public class PdvAgent {
 
 		LOGGER.info("Inicializando...");
 
-		System.out.println("groupId: " + application.getProperty("groupId"));
-		System.out.println("artifactId: " + application.getProperty("artifactId"));
-		System.out.println("version: " + application.getProperty("version"));
+		LOGGER.info("groupId: " + APPLICATION.getProperty("groupId"));
+		LOGGER.info("artifactId: " + APPLICATION.getProperty("artifactId"));
+		LOGGER.info("version: " + APPLICATION.getProperty("version"));
 
 		testNetwork();
 		hostname();
@@ -84,6 +83,7 @@ public class PdvAgent {
 
 		// Enviar o status do pdv para o zabbix (usar classe ZabbixUtil
 	}
+	
 	public static void testNetwork() {
 		try {
 			System.out.println("Your Host addr: " + InetAddress.getLocalHost().getHostAddress());
