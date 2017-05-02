@@ -1,11 +1,17 @@
 package br.com.centauro.loja.pdvstatus;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
+import java.util.Properties;
 
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +27,27 @@ public class PdvAgent {
 	private static Logger LOGGER = LoggerFactory.getLogger(PdvAgent.class);
 
 	private static final SimpleDateFormat SDF_YYMMDDHHMMSSSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+	
+	private static Properties application;
+	
+	static {
+		application = new Properties();
+
+		try {
+			InputStream is = new PdvAgent().getClass().getResourceAsStream("application.properties");
+	        if (is != null) {
+	        	application.load(is);
+	        }
+	        
+			is.close();
+		} catch (FileNotFoundException e) {
+			LOGGER.error("Arquivo nao encontrado [application.properties]", e);
+			application.clear();
+		} catch (Exception e) {
+			LOGGER.error("Exception", e);
+			application.clear();
+		}
+	}
 
 	/**
 	 * Metodo main
@@ -30,6 +57,18 @@ public class PdvAgent {
 	public static void main(String[] args) {
 
 		LOGGER.info("Inicializando...");
+
+		MavenXpp3Reader reader = new MavenXpp3Reader();
+		try {
+			Model model = reader.read(new FileReader("pom.xml"));
+			System.out.println(model.getId());
+			System.out.println(model.getGroupId());
+			System.out.println(model.getArtifactId());
+			System.out.println(model.getVersion());
+		} catch( Exception e) {
+			System.err.println(e.getMessage());
+		}
+
 		testNetwork();
 		hostname();
 		// Obter as informações do PDV
