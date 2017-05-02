@@ -12,21 +12,17 @@ public class TestZabbixUtil {
 
 	private PdvStatus pdvStatusObj;
 	
-	private Properties pdvProperties;
-	
 	@Before
 	public void prepare() {
-		pdvStatusObj = new PdvStatus(null, null, null);
+		pdvStatusObj = new PdvStatus();
+		pdvStatusObj.setIdZabbixPdv("CE71-I90-SUSE");
 		pdvStatusObj.setIp("192.168.171.181");
 		pdvStatusObj.setHostName("I90");
-		
-		pdvProperties = new Properties();
-		pdvProperties.setProperty("codigoAtivacao", "123456789");
 	}
 	
 	@Test
 	public void test() {
-		ZabbixUtil.saveZabbixFile(pdvStatusObj, pdvProperties);
+		ZabbixUtil.saveZabbixFile(pdvStatusObj);
 	}
 
 }

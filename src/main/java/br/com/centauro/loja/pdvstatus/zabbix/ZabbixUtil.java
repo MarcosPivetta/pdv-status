@@ -59,19 +59,18 @@ public abstract class ZabbixUtil {
 		}
     }
 	
-	/**
-	 * Grava o conteudo do pdvStatus em arquivo para envio ao zabbix
-	 * @param satStatusObj Objeto PdvStatus, contendo as informações obtidas do SAT
-	 * @param satProperties Arquivo de properties, com as configurações
-	 */
-	public static void saveZabbixFile(final PdvStatus pdvStatusObj, final Properties pdvProperties) {
+    /**
+     * Grava o conteudo do pdvStatus em arquivo para envio ao zabbix
+     * @param pdvStatusObj Objeto PdvStatus, contendo as informações obtidas do PDV
+     */
+    public static void saveZabbixFile(final PdvStatus pdvStatusObj) {
 		LOGGER.info("Gerando arquivo...");
 		try {
-			final String PRFX = PDV+pdvStatusObj.getHostName();
+			final String PRFX = PDV+pdvStatusObj.getIdZabbixPdv();
 			
     		StringBuilder content = new StringBuilder()
     				.append(PRFX).append(" ").append("Ip ").append(pdvStatusObj.getIp()).append(LF)
-    				.append(PRFX).append(" ").append("Hostaname ").append(pdvStatusObj.getHostName()).append(LF)
+    				.append(PRFX).append(" ").append("HostName ").append(pdvStatusObj.getHostName()).append(LF)
     				;
     
     		String absolutePath = writeFile(content);
