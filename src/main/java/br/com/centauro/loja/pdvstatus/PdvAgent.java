@@ -1,7 +1,6 @@
 package br.com.centauro.loja.pdvstatus;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -10,8 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +31,10 @@ public class PdvAgent {
 		application = new Properties();
 
 		try {
-			InputStream is = new PdvAgent().getClass().getResourceAsStream("application.properties");
+			InputStream is = new PdvAgent().getClass()
+					.getResourceAsStream("/META-INF/maven/br.com.centauro.loja/pdv-status/pom.properties");
+			application = new Properties();
+
 	        if (is != null) {
 	        	application.load(is);
 	        }
@@ -58,16 +58,9 @@ public class PdvAgent {
 
 		LOGGER.info("Inicializando...");
 
-		MavenXpp3Reader reader = new MavenXpp3Reader();
-		try {
-			Model model = reader.read(new FileReader("pom.xml"));
-			System.out.println(model.getId());
-			System.out.println(model.getGroupId());
-			System.out.println(model.getArtifactId());
-			System.out.println(model.getVersion());
-		} catch( Exception e) {
-			System.err.println(e.getMessage());
-		}
+		System.out.println("groupId: " + application.getProperty("groupId"));
+		System.out.println("artifactId: " + application.getProperty("artifactId"));
+		System.out.println("version: " + application.getProperty("version"));
 
 		testNetwork();
 		hostname();

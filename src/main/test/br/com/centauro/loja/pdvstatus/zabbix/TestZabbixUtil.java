@@ -16,7 +16,7 @@ public class TestZabbixUtil {
 	
 	@Before
 	public void prepare() {
-		pdvStatusObj = new PdvStatus(null, null);
+		pdvStatusObj = new PdvStatus(null, null, null);
 		pdvStatusObj.setIp("192.168.171.181");
 		pdvStatusObj.setHostaname("I90");
 		
