@@ -18,7 +18,7 @@ public class TestZabbixUtil {
 	public void prepare() {
 		pdvStatusObj = new PdvStatus(null, null, null);
 		pdvStatusObj.setIp("192.168.171.181");
-		pdvStatusObj.setHostaname("I90");
+		pdvStatusObj.setHostName("I90");
 		
 		pdvProperties = new Properties();
 		pdvProperties.setProperty("codigoAtivacao", "123456789");

@@ -10,18 +10,22 @@ public class PdvStatus {
 	/**
 	 * Endereço IP da LAN Tamanho: 15 Ex.: 192.168.010.100
 	 */
-	private String Ip;
+	private String ip;
 
 	/**
 	 * Hostname da estação Ex.: I90
 	 */
-	private String hostaname;
+	private String hostName;
 
-	public PdvStatus(String ip, String hostaname, String zabbixId) {
+	public PdvStatus() {
+		
+	}
+	
+	public PdvStatus(String zabbixId, String ip, String hostName) {
 		super();
-		this.Ip = ip;
-		this.hostaname = hostaname;
 		this.idZabbixPdv = zabbixId;
+		this.ip = ip;
+		this.hostName = hostName;
 	}
 
 	public String getIdZabbixPdv() {
@@ -33,23 +37,18 @@ public class PdvStatus {
 	}
 
 	public String getIp() {
-		return Ip;
+		return ip;
 	}
 
 	public void setIp(String ip) {
-		Ip = ip;
+		this.ip = ip;
 	}
 
-	public String getHostaname() {
-		return hostaname;
+	public String getHostName() {
+		return hostName;
 	}
 
-	public void setHostaname(String hostaname) {
-		this.hostaname = hostaname;
-	}
-
-	@Override
-	public String toString() {
-		return "PdvStatus [Ip=" + Ip + ", hostaname=" + hostaname + ", zabbixId=" + idZabbixPdv + "]";
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
 	}
 }

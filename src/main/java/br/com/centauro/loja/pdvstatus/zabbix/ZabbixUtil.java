@@ -67,11 +67,11 @@ public abstract class ZabbixUtil {
 	public static void saveZabbixFile(final PdvStatus pdvStatusObj, final Properties pdvProperties) {
 		LOGGER.info("Gerando arquivo...");
 		try {
-			final String PRFX = PDV+pdvStatusObj.getHostaname();
+			final String PRFX = PDV+pdvStatusObj.getHostName();
 			
     		StringBuilder content = new StringBuilder()
     				.append(PRFX).append(" ").append("Ip ").append(pdvStatusObj.getIp()).append(LF)
-    				.append(PRFX).append(" ").append("Hostaname ").append(pdvStatusObj.getHostaname()).append(LF)
+    				.append(PRFX).append(" ").append("Hostaname ").append(pdvStatusObj.getHostName()).append(LF)
     				;
     
     		String absolutePath = writeFile(content);
