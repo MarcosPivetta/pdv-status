@@ -7,17 +7,20 @@ public abstract class RegexUtil {
 
 	private static Matcher matcher;
 	private static Pattern pattern_ip;
-	private static Pattern pattern_ethernet;
+	private static Pattern pattern_enp;
+	private static Pattern pattern_eth;
 
 	private static final String IPADDRESS_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 
-	private static final String IPADDRESS_ETHERNET = "^enp[0-9]+s[0-9]+";
+	private static final String IPADDRESS_ENP = "^enp[0-9]+s[0-9]+";
+	private static final String IPADDRESS_ETH = "^eth[0-9]";
 
 	static {
 		pattern_ip = Pattern.compile(IPADDRESS_PATTERN);
-		pattern_ethernet = Pattern.compile(IPADDRESS_ETHERNET);
+		pattern_enp = Pattern.compile(IPADDRESS_ENP);
+		pattern_eth = Pattern.compile(IPADDRESS_ETH);
 	}
 
 	/**
@@ -38,7 +41,6 @@ public abstract class RegexUtil {
 	 * @return true valid ethernet interface, false invalid ethernet interface 
 	 */
 	public static boolean isEthernetInterface(final String interfaceName) {
-		matcher = pattern_ethernet.matcher(interfaceName);
-		return matcher.matches();
+		return (pattern_enp.matcher(interfaceName).matches() || pattern_eth.matcher(interfaceName).matches());
 	}
 }
