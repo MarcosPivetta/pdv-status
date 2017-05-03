@@ -13,7 +13,9 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.centauro.loja.pdvstatus.model.PdvStatus;
 import br.com.centauro.loja.pdvstatus.util.RegexUtil;
+import br.com.centauro.loja.pdvstatus.zabbix.ZabbixUtil;
 
 /**
  * Classe principal, com responsabilidade de consultar as informações do PDV e
@@ -65,8 +67,9 @@ public class PdvAgent {
 		LOGGER.info("version: " + APPLICATION.getProperty("version"));
 		
 		// Obter as informações do PDV
-		String ip = ip();// IP
-		String hostName = hostName(); // Hostname
+		String idZabbixPdv = getIdZabbixPdv();
+		String ip = getIp();// IP
+		String hostName = getHostName(); // Hostname
 		// Código da Loja
 		// Cidade
 		// Estado
@@ -75,15 +78,20 @@ public class PdvAgent {
 
 		// Verificar se é principal, ou se é estação (Tauros SP ou pdv normal)
 
-		// Se for P2K (Taurus), obter a versão e a data de atualização
+		// Se for P2K (Tauros), obter a versão e a data de atualização
 		/*
-		 * if(isTaurus()) { obter versão obter data de atualização } else { //É
+		 * if(isTauros()) { obter versão obter data de atualização } else { //É
 		 * sispac // nem sei o que colocar }
 		 */
 
 		// Popular o objeto PdvStatus com as informações para enviar ao Zabbix
-
+		PdvStatus pdvStatus = new PdvStatus();
+		pdvStatus.setIdZabbixPdv(idZabbixPdv);
+		pdvStatus.setIp(ip);
+		pdvStatus.setHostName(hostName);
+		
 		// Enviar o status do pdv para o zabbix (usar classe ZabbixUtil
+		ZabbixUtil.saveZabbixFile(pdvStatus);
 	}
 
 	/**
@@ -129,11 +137,17 @@ public class PdvAgent {
 		}
 	}
 
+	public static String getIdZabbixPdv() {
+		String idZabbixPdv = null;
+		
+		return idZabbixPdv;
+	}
+	
 	/**
 	 * Obtém o hostName da máquina
 	 * @return hostName da máquina, ou null em caso de falha
 	 */
-	public static String hostName() {
+	public static String getHostName() {
 		String hostName = "";
 		try {
 			hostName = InetAddress.getLocalHost().getHostName();
@@ -148,7 +162,7 @@ public class PdvAgent {
 	 * Obtém o IP da interface de rede ethernet
 	 * @return o IP obtido, ou null em caso de falha
 	 */
-	public static String ip() {
+	public static String getIp() {
 		String ip = null;
 
 		try {

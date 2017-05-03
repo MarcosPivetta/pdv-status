@@ -14,8 +14,8 @@ public class TestZabbixUtil {
 	public void prepare() {
 		pdvStatusObj = new PdvStatus();
 		pdvStatusObj.setIdZabbixPdv("CE71-I90-SUSE");
-		pdvStatusObj.setIp(PdvAgent.ip());
-		pdvStatusObj.setHostName(PdvAgent.hostName());
+		pdvStatusObj.setIp(PdvAgent.getIp());
+		pdvStatusObj.setHostName(PdvAgent.getHostName());
 	}
 
 	@Test
