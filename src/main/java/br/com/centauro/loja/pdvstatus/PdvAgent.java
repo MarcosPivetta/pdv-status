@@ -36,6 +36,9 @@ public class PdvAgent {
 	
 	private static final String ZABBIX_FILE = "/etc/zabbix/zabbix-agentd.conf";
 	private static final String ZABBIX_HOSTNAME = "Hostname=";
+	
+	private static final String PATH_TAUROS_SP = "/p2ksp";
+	private static final String PATH_TAUROS_ESTACAO = "/p2k";
 
 	static {
 		APPLICATION = new Properties();
@@ -64,7 +67,6 @@ public class PdvAgent {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
 		LOGGER.info("Inicializando...");
 
 		LOGGER.info("groupId: " + APPLICATION.getProperty("groupId"));
@@ -100,18 +102,27 @@ public class PdvAgent {
 				
 		// Verificar se é principal, ou se é estação (Tauros SP ou pdv normal)
 
-		// Se for P2K (Tauros), obter a versão e a data de atualização
+		// Se for Tauros (Tauros), obter a versão e a data de atualização
 		/*
 		 * if(isTauros()) { obter versão obter data de atualização } else { //É
 		 * sispac // nem sei o que colocar }
 		 */
 		// Versão do PDV Status
-
+System.out.println(isTaurosSP());
 		// Popular o objeto PdvStatus com as informações para enviar ao Zabbix
 		PdvStatus pdvStatus = new PdvStatus();
 		pdvStatus.setIdZabbixPdv(idZabbixPdv);// Adicionando o Prefixo PDV ao ID
 		pdvStatus.setIp(ip);
 		pdvStatus.setHostName(hostName);
+		pdvStatus.setCodLoja(codLoja);
+		pdvStatus.setNumPdv(numPdv);
+		pdvStatus.setSistemaOp(sistemaOp);
+		pdvStatus.setVersaoPdvStatus(APPLICATION.getProperty("version"));
+		//Tipo PDV Tauros (SP ou ESTACAO)
+		//Versão do Tauros
+		//Tipo PDV Sispac (PRINCIPAL ou ESTACAO)
+		//Versão do Sispac
+		pdvStatus.setHoraAtual(horaAtual);
 		
 		// Enviar o status do pdv para o zabbix (usar classe ZabbixUtil
 		ZabbixUtil.saveZabbixFile(pdvStatus);
@@ -267,4 +278,23 @@ public class PdvAgent {
 
 		return ip;
 	}
+	
+	public static boolean isTaurosSP(){
+		boolean isTaurosSP = false;		
+		
+		try {
+			File taurosSp = new File(PATH_TAUROS_SP);
+			if (taurosSp.isDirectory()) {	
+				LOGGER.debug("O diretório " + PATH_TAUROS_SP + " existe!");
+				isTaurosSP = true;
+			}
+			
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+		
+		LOGGER.info("isTaurosSP: " + isTaurosSP);
+		return isTaurosSP;	
+	}
+	
 }

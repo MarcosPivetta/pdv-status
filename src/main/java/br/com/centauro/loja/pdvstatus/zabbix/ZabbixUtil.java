@@ -71,6 +71,14 @@ public abstract class ZabbixUtil {
     		StringBuilder content = new StringBuilder()
     				.append(PRFX).append(" ").append("Ip ").append(pdvStatus.getIp()).append(LF)
     				.append(PRFX).append(" ").append("HostName ").append(pdvStatus.getHostName()).append(LF)
+    				.append(PRFX).append(" ").append("CodLoja ").append(pdvStatus.getCodLoja()).append(LF)
+    				.append(PRFX).append(" ").append("NumPDV ").append(pdvStatus.getNumPdv()).append(LF)
+    				.append(PRFX).append(" ").append("SitemaOp ").append(pdvStatus.getSistemaOp()).append(LF)
+    				.append(PRFX).append(" ").append("VersaoPdvStatus ").append(pdvStatus.getVersaoPdvStatus()).append(LF)
+    				//.append(PRFX).append(" ").append("VersaoTauros ").append(pdvStatus.getSistemaOp()).append(LF)
+    				//.append(PRFX).append(" ").append("VersaoSispac ").append(pdvStatus.getSistemaOp()).append(LF)
+    				//.append(PRFX).append(" ").append("TipoPDV ").append(pdvStatus.getSistemaOp()).append(LF)
+    				.append(PRFX).append(" ").append("DataHoraStatus ").append(pdvStatus.getHoraAtual()).append(LF);
     				;
     
     		String absolutePath = writeFile(content);
