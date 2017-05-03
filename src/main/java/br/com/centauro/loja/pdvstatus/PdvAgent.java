@@ -1,5 +1,6 @@
 package br.com.centauro.loja.pdvstatus;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -10,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,12 +28,14 @@ import br.com.centauro.loja.pdvstatus.zabbix.ZabbixUtil;
  *
  */
 public class PdvAgent {
-
 	private static Logger LOGGER = LoggerFactory.getLogger(PdvAgent.class);
 
 	private static final SimpleDateFormat SDF_YYMMDDHHMMSSSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
 	public static final Properties APPLICATION;
+	
+	private static final String ZABBIX_FILE = "/etc/zabbix/zabbix-agentd.conf";
+	private static final String ZABBIX_HOSTNAME = "Hostname=";
 
 	static {
 		APPLICATION = new Properties();
@@ -77,6 +81,18 @@ public class PdvAgent {
 		String strDataHora = SDF_YYMMDDHHMMSSSSS.format(horaAtual);
 		
 		// Código da Loja
+		String codLoja = null;
+		// Numero da loja
+		String numPdv = null;
+		// Sistema Operacional
+		String sistemaOp = null;
+		if(idZabbixPdv != null && !"".equals(idZabbixPdv)) {
+			String[] id = idZabbixPdv.split("-");
+			codLoja = id[0];
+			numPdv = id[1];
+			sistemaOp = id[2];
+		}
+		
 		// Cidade
 		// Estado
 
@@ -93,7 +109,7 @@ public class PdvAgent {
 
 		// Popular o objeto PdvStatus com as informações para enviar ao Zabbix
 		PdvStatus pdvStatus = new PdvStatus();
-		pdvStatus.setIdZabbixPdv(idZabbixPdv);
+		pdvStatus.setIdZabbixPdv(idZabbixPdv);// Adicionando o Prefixo PDV ao ID
 		pdvStatus.setIp(ip);
 		pdvStatus.setHostName(hostName);
 		
@@ -144,9 +160,48 @@ public class PdvAgent {
 		}
 	}
 
+	/**
+	 * Obtém o idZabbixPdv do arquivo de configuração do Zabbix 
+	 * @return o id obtido, ou null em caso de erro ao abrir o arquivo
+	 */
 	public static String getIdZabbixPdv() {
 		String idZabbixPdv = null;
 		
+		try {
+			File fileZabbix = new File(ZABBIX_FILE);
+
+			if(fileZabbix.exists()){
+				LOGGER.debug("O arquivo " + ZABBIX_FILE + " existe!");
+				// Verificar se consegue ler
+				if(fileZabbix.canRead()) {
+
+					Scanner scanner = new Scanner(fileZabbix);
+					while (scanner.hasNextLine()) {
+						String line = scanner.nextLine();
+						if(line.startsWith(ZABBIX_HOSTNAME)) {
+							// Achou a linha que começa com Hostname=
+							String[] lineSplit = line.split("=");
+							idZabbixPdv = lineSplit[1];
+							break;
+						}
+					}
+					scanner.close();
+				} else {
+					LOGGER.error("Não é possível ler o arquivo: " + ZABBIX_FILE);
+				}
+//				FileInputStream fis = new FileInputStream(fileZabbix);
+//				fis.
+			} else {
+				LOGGER.error("O arquivo " + ZABBIX_FILE + " NÃO EXISTE!");
+			}
+			
+			
+			// Se abriu, procurar pela chave "Hostname"
+		} catch(Exception e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+		
+		LOGGER.debug("idZabbixPdv: " + idZabbixPdv);
 		return idZabbixPdv;
 	}
 	
