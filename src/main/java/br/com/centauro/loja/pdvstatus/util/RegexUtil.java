@@ -32,6 +32,11 @@ public abstract class RegexUtil {
 		return matcher.matches();
 	}
 
+	/**
+	 * Validate network interface with regular expression
+	 * @param interfaceName network interface name
+	 * @return true valid ethernet interface, false invalid ethernet interface 
+	 */
 	public static boolean isEthernetInterface(final String interfaceName) {
 		matcher = pattern_ethernet.matcher(interfaceName);
 		return matcher.matches();

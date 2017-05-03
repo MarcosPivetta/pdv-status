@@ -13,6 +13,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.centauro.loja.pdvstatus.util.RegexUtil;
+
 /**
  * Classe principal, com responsabilidade de consultar as informações do PDV e
  * enviar para o Zabbix
@@ -61,9 +63,10 @@ public class PdvAgent {
 		LOGGER.info("groupId: " + APPLICATION.getProperty("groupId"));
 		LOGGER.info("artifactId: " + APPLICATION.getProperty("artifactId"));
 		LOGGER.info("version: " + APPLICATION.getProperty("version"));
+		
 		// Obter as informações do PDV
-		ip();// IP
-		hostname(); // Hostname
+		String ip = ip();// IP
+		String hostName = hostName(); // Hostname
 		// Código da Loja
 		// Cidade
 		// Estado
@@ -83,6 +86,9 @@ public class PdvAgent {
 		// Enviar o status do pdv para o zabbix (usar classe ZabbixUtil
 	}
 
+	/**
+	 * @deprecated Remover esse método
+	 */
 	public static void testNetwork() {
 		try {
 			System.out.println("Your Host addr: " + InetAddress.getLocalHost().getHostAddress());
@@ -123,36 +129,66 @@ public class PdvAgent {
 		}
 	}
 
-	public static String hostname() {
-		String hostname = "";
+	/**
+	 * Obtém o hostName da máquina
+	 * @return hostName da máquina, ou null em caso de falha
+	 */
+	public static String hostName() {
+		String hostName = "";
 		try {
-			hostname = InetAddress.getLocalHost().getHostName();
-			System.out.println(hostname);
+			hostName = InetAddress.getLocalHost().getHostName();
+			LOGGER.info("HostName: " + hostName);
 		} catch (UnknownHostException e) {
-			// failed; try alternate means.
+			LOGGER.error(e.getMessage(), e);
 		}
-		return hostname;
+		return hostName;
 	}
 
+	/**
+	 * Obtém o IP da interface de rede ethernet
+	 * @return o IP obtido, ou null em caso de falha
+	 */
 	public static String ip() {
-		Enumeration<?> nis = null;
-        try {
-            nis = NetworkInterface.getNetworkInterfaces();
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-        String ip = null;
-		while (nis.hasMoreElements()) {
-            NetworkInterface ni = (NetworkInterface) nis.nextElement();
-            Enumeration<?> ias = ni.getInetAddresses();
-            while (ias.hasMoreElements()) {
-                InetAddress ia = (InetAddress) ias.nextElement();
-                if (ia.getHostAddress().contains("192.168")) {//Nesse if está a charada, sendo que eu sei que meu ip começa com 10.132, por exemplo
-                ip=ia.getHostAddress();    
-                }
-            }
-        }
-        System.out.println(ip);
+		String ip = null;
+
+		try {
+			Enumeration<?> nis = NetworkInterface.getNetworkInterfaces();
+
+			while (nis.hasMoreElements()) {
+				NetworkInterface ni = (NetworkInterface) nis.nextElement();
+
+				boolean achouIpValido = false;
+				
+				// Valida se a interface é ethernet
+				LOGGER.debug("Validando interface: " + ni.getName());
+				if (RegexUtil.isEthernetInterface(ni.getName())) {
+					LOGGER.debug("Interface " + ni.getName() + " válida!");
+					Enumeration<?> ias = ni.getInetAddresses();
+					while (ias.hasMoreElements()) {
+						InetAddress ia = (InetAddress) ias.nextElement();
+						
+						// Verifica se o IP obtido é válido
+						LOGGER.debug("Validando ip: " + ia.getHostAddress());
+						if (RegexUtil.isValidIp(ia.getHostAddress())) {
+							// É válido, armazena da variável ip e para o loop
+							ip = ia.getHostAddress();
+							LOGGER.info("IP válido: " + ip);
+							achouIpValido = true;
+							break;
+						}
+					}
+				}
+				
+				// Verifica se achou ip válido
+				if(achouIpValido) {
+					// Se achou, para o while de networkInterfaces
+					break;
+				}
+			}
+		} catch (SocketException e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+
 		return ip;
 	}
 }
