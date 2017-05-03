@@ -7,6 +7,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -70,12 +71,17 @@ public class PdvAgent {
 		String idZabbixPdv = getIdZabbixPdv();
 		String ip = getIp();// IP
 		String hostName = getHostName(); // Hostname
+
+		// Hora da obtenção do status
+		Date horaAtual = new Date(System.currentTimeMillis());
+		String strDataHora = SDF_YYMMDDHHMMSSSSS.format(horaAtual);
+		
 		// Código da Loja
 		// Cidade
 		// Estado
-		// Versão do PDV Status
-		// Hora da obtenção do status
 
+		// Verificar se é Tauros
+				
 		// Verificar se é principal, ou se é estação (Tauros SP ou pdv normal)
 
 		// Se for P2K (Tauros), obter a versão e a data de atualização
@@ -83,6 +89,7 @@ public class PdvAgent {
 		 * if(isTauros()) { obter versão obter data de atualização } else { //É
 		 * sispac // nem sei o que colocar }
 		 */
+		// Versão do PDV Status
 
 		// Popular o objeto PdvStatus com as informações para enviar ao Zabbix
 		PdvStatus pdvStatus = new PdvStatus();
