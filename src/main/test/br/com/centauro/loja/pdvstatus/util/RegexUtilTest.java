@@ -39,7 +39,8 @@ public class RegexUtilTest {
 		String et8 = "enp3AsA0"; // false
 		String et9 = "enpp3s0s"; // false
 		String et10 = "enp30s10"; // true
-
+		String et11 = "eth0"; // true
+		
 		/**
 		 * Validando a mascara de Interface Ethernet
 		 */
@@ -54,6 +55,7 @@ public class RegexUtilTest {
 		assertFalse(RegexUtil.isEthernetInterface(et8));
 		assertFalse(RegexUtil.isEthernetInterface(et9));
 		assertTrue(RegexUtil.isEthernetInterface(et10));
+		assertTrue(RegexUtil.isEthernetInterface(et11));
 
 	}
 }
