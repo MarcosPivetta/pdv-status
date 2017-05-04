@@ -34,6 +34,7 @@ public class SispacUtil {
 	public static String getVersaoSispac() {
 		String versao = null;
 		
+		// TODO No tratamento da exceção retornar "ERRO"
 		LOGGER.info("versão: " + versao);
 		return versao;
 	}

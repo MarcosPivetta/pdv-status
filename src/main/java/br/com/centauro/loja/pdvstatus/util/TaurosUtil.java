@@ -73,13 +73,15 @@ public class TaurosUtil {
 
 	/**
 	 * Obtém a versão do PDV Tauros.
-	 * @return String com a versão recuperada, ou null caso não encontre o arquivo
+	 * 
+	 * @return String com a versão recuperada, ou null caso não encontre o
+	 *         arquivo
 	 */
 	public static String getVersaoTauros() {
 		String versao = null;
 
-		if (isTaurosEstacao()) {
-			try {
+		try {
+			if (isTaurosEstacao()) {
 				File fileEstacao = new File(PATH_TAUROS_ESTACAO + "/" + FILE_TAUROS_ESTACAO);
 				if (fileEstacao.exists()) {
 					LOGGER.debug("O arquivo " + FILE_TAUROS_ESTACAO + " existe!");
@@ -87,16 +89,10 @@ public class TaurosUtil {
 					scanner = new Scanner(fileEstacao);
 					versao = scanner.toString();
 				}
-
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
 			}
 
-		}
-
-		if (isTaurosEstacao()) {
-			try {
-				File fileSP = new File(PATH_TAUROS_ESTACAO + "/" + FILE_TAUROS_SP);
+			if (isTaurosSP()) {
+				File fileSP = new File(PATH_TAUROS_SP + "/" + FILE_TAUROS_SP);
 				if (fileSP.exists()) {
 					LOGGER.debug("O arquivo " + FILE_TAUROS_SP + " existe!");
 
@@ -107,12 +103,12 @@ public class TaurosUtil {
 						versao = linesplit[1].trim();
 					}
 				}
-
-			} catch (Exception e) {
-				LOGGER.error(e.getMessage(), e);
 			}
-
+		} catch (Exception e) {
+			versao = "ERRO";
+			LOGGER.error(e.getMessage(), e);
 		}
+		
 		return versao;
 	}
 	
@@ -120,11 +116,10 @@ public class TaurosUtil {
 		TipoPdvEnum tipoTauros = null;
 
 		try {
-
 			if (isTaurosSP()) {
-				return tipoTauros = TipoPdvEnum.SP;
-			} else if (TaurosUtil.isTaurosEstacao()) {
-				return tipoTauros = TipoPdvEnum.ESTACAO;
+				tipoTauros = TipoPdvEnum.SP;
+			} else if (isTaurosEstacao()) {
+				tipoTauros = TipoPdvEnum.ESTACAO;
 			}
 
 		} catch (Exception e) {

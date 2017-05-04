@@ -18,10 +18,11 @@ public class NetworkUtil {
 	 * @return hostName da máquina, ou null em caso de falha
 	 */
 	public static String getHostName() {
-		String hostName = "";
+		String hostName = null;
 		try {
 			hostName = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
+			hostName = "ERRO";
 			LOGGER.error(e.getMessage(), e);
 		}
 		LOGGER.info("HostName: " + hostName);
@@ -71,6 +72,7 @@ public class NetworkUtil {
 				}
 			}
 		} catch (SocketException e) {
+			ip = "ERRO";
 			LOGGER.error(e.getMessage(), e);
 		}
 

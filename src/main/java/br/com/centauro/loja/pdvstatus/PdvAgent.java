@@ -73,16 +73,20 @@ public class PdvAgent {
 		TipoPdvEnum tipoPdvEnum = TaurosUtil.getTipoTauros();
 		
 		// Código da Loja
-		String codLoja = null;
+		String codLoja = "ERRO";
 		// Numero da loja
-		String numPdv = null;
+		String numPdv = "ERRO";
 		// Sistema Operacional
-		String sistemaOp = null;
-		if(idZabbixPdv != null && !"".equals(idZabbixPdv)) {
-			String[] id = idZabbixPdv.split("-");
-			codLoja = id[0];
-			numPdv = id[1];
-			sistemaOp = id[2];
+		String sistemaOp = "ERRO";
+		try {
+			if(idZabbixPdv != null && !"".equals(idZabbixPdv)) {
+				String[] id = idZabbixPdv.split("-");
+				codLoja = id[0];
+				numPdv = id[1];
+				sistemaOp = id[2];
+			}
+		} catch(Exception e) {
+			LOGGER.error("Falha ao converter o idZabbix no codigo da loja, ou numPdv ou Sistema Operacional.", e);
 		}
 		
 		// Popular o objeto PdvStatus com as informações para enviar ao Zabbix
