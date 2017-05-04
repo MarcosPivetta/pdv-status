@@ -112,6 +112,11 @@ public class TaurosUtil {
 		return versao;
 	}
 	
+	/**
+	 * Método para obter tipo de Tauros.
+	 *
+	 * @return TipoPdvEnum com o tipo recuperado, sendo SP ou ESTACAO, ou null caso não seja Tauros.
+	 */
 	public static TipoPdvEnum getTipoTauros() {
 		TipoPdvEnum tipoTauros = null;
 
