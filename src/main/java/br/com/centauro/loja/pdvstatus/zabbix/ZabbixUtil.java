@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,9 @@ public abstract class ZabbixUtil {
 	
 	private static final String ZABBIX_PATH = "log/";
 	private static final String ZABBIX_FILE = "pdv-zabbix.log";
+	
+	private static final String ZABBIX_CONFIG_FILE = "/etc/zabbix/zabbix-agentd.conf";
+	private static final String ZABBIX_HOSTNAME = "Hostname=";
 
 	private static final String PROPERTY_FILE_PATH = "./";
 	private static final String PROPERTY_FILE_NAME = "ZABBIX.properties";
@@ -75,12 +79,14 @@ public abstract class ZabbixUtil {
     				.append(PRFX).append(" ").append("NumPDV ").append(pdvStatus.getNumPdv()).append(LF)
     				.append(PRFX).append(" ").append("SitemaOp ").append(pdvStatus.getSistemaOp()).append(LF)
     				.append(PRFX).append(" ").append("VersaoPdvStatus ").append(pdvStatus.getVersaoPdvStatus()).append(LF)
-    				.append(PRFX).append(" ").append("VersaoTauros ").append(pdvStatus.getSistemaOp()).append(LF)
-    				.append(PRFX).append(" ").append("VersaoSispac ").append(pdvStatus.getSistemaOp()).append(LF)
+    				.append(PRFX).append(" ").append("VersaoTauros ").append(pdvStatus.getVersaoTauros()).append(LF)
+    				.append(PRFX).append(" ").append("VersaoSispac ").append(pdvStatus.getVersaoSispac()).append(LF)
     				.append(PRFX).append(" ").append("TipoPDVTauros ").append(pdvStatus.getTipoPdvTauros()).append(LF)
+    				.append(PRFX).append(" ").append("TipoPDVSispac ").append(pdvStatus.getTipoPdvSispac()).append(LF)
     				.append(PRFX).append(" ").append("DataHoraStatus ").append(SDF_DATE_TIME.format(pdvStatus.getHoraAtual())).append(LF);
     				;
     
+    				LOGGER.debug("Zabbix file content ------------\n"+content);
     		String absolutePath = writeFile(content);
     		
     		if(null == absolutePath) {
@@ -173,6 +179,47 @@ public abstract class ZabbixUtil {
 		} catch (IOException ex) {
 			LOGGER.error("Erro = " + ex.getMessage());
 		}
+	}
+
+	/**
+	 * Obtém o idZabbixPdv do arquivo de configuração do Zabbix 
+	 * @return o id obtido, ou null em caso de erro ao abrir o arquivo
+	 */
+	public static String getIdZabbixPdv() {
+		String idZabbixPdv = null;
+		
+		try {
+			File fileZabbix = new File(ZABBIX_CONFIG_FILE);
+
+			if(fileZabbix.exists()){
+				LOGGER.debug("O arquivo " + ZABBIX_CONFIG_FILE + " existe!");
+				// Verificar se consegue ler
+				if(fileZabbix.canRead()) {
+
+					Scanner scanner = new Scanner(fileZabbix);
+					while (scanner.hasNextLine()) {
+						String line = scanner.nextLine();
+						if(line.startsWith(ZABBIX_HOSTNAME)) {
+							// Achou a linha que começa com Hostname=
+							String[] lineSplit = line.split("=");
+							idZabbixPdv = lineSplit[1];
+							break;
+						}
+					}
+					scanner.close();
+				} else {
+					LOGGER.error("Não é possível ler o arquivo: " + ZABBIX_CONFIG_FILE);
+				}
+			} else {
+				LOGGER.error("O arquivo " + ZABBIX_CONFIG_FILE + " NÃO EXISTE!");
+			}
+			
+		} catch(Exception e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+		
+		LOGGER.info("idZabbixPdv: " + idZabbixPdv);
+		return idZabbixPdv;
 	}
 
 }

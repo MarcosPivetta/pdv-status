@@ -47,6 +47,16 @@ public class PdvStatus {
 	private String versaoPdvStatus;
 
 	/**
+	 * Versão do Tauros Ex.:  
+	 */
+	private String versaoTauros;
+
+	/**
+	 * Versão do SISPAC Ex.:
+	 */
+	private String versaoSispac;
+
+	/**
 	 * Tipoa PDV Tauros: SP ou ESTACAO
 	 */
 	private TipoPdvEnum tipoPdvTauros;
@@ -121,6 +131,22 @@ public class PdvStatus {
 
 	public void setVersaoPdvStatus(String versaoPdvStatus) {
 		this.versaoPdvStatus = versaoPdvStatus;
+	}
+
+	public String getVersaoTauros() {
+		return versaoTauros;
+	}
+
+	public void setVersaoTauros(String versaoTauros) {
+		this.versaoTauros = versaoTauros;
+	}
+
+	public String getVersaoSispac() {
+		return versaoSispac;
+	}
+
+	public void setVersaoSispac(String versaoSispac) {
+		this.versaoSispac = versaoSispac;
 	}
 
 	public TipoPdvEnum getTipoPdvTauros() {
