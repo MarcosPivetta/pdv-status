@@ -2,6 +2,8 @@ package br.com.centauro.loja.pdvstatus.model;
 
 import java.util.Date;
 
+import br.com.centauro.loja.pdvstatus.type.TipoPdvEnum;
+
 public class PdvStatus {
 
 	/**
@@ -44,8 +46,17 @@ public class PdvStatus {
 	 */
 	private String versaoPdvStatus;
 
+	/**
+	 * Tipoa PDV Tauros: SP ou ESTACAO
+	 */
+	private TipoPdvEnum tipoPdvTauros;
+	
+	/**
+	 * Tipoa PDV SISPAC: PRINCIPAL ou ESTACAO
+	 */
+	private TipoPdvEnum tipoPdvSispac;
+	
 	public PdvStatus() {
-		
 	}
 
 	public String getIdZabbixPdv() {
@@ -110,6 +121,22 @@ public class PdvStatus {
 
 	public void setVersaoPdvStatus(String versaoPdvStatus) {
 		this.versaoPdvStatus = versaoPdvStatus;
+	}
+
+	public TipoPdvEnum getTipoPdvTauros() {
+		return tipoPdvTauros;
+	}
+
+	public void setTipoPdvTauros(TipoPdvEnum tipoPdvTauros) {
+		this.tipoPdvTauros = tipoPdvTauros;
+	}
+
+	public TipoPdvEnum getTipoPdvSispac() {
+		return tipoPdvSispac;
+	}
+
+	public void setTipoPdvSispac(TipoPdvEnum tipoPdvSispac) {
+		this.tipoPdvSispac = tipoPdvSispac;
 	}
 
 }

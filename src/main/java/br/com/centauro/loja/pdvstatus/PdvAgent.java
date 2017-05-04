@@ -7,7 +7,6 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -17,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.centauro.loja.pdvstatus.model.PdvStatus;
+import br.com.centauro.loja.pdvstatus.type.TipoPdvEnum;
 import br.com.centauro.loja.pdvstatus.util.RegexUtil;
 import br.com.centauro.loja.pdvstatus.zabbix.ZabbixUtil;
 
@@ -29,8 +29,6 @@ import br.com.centauro.loja.pdvstatus.zabbix.ZabbixUtil;
  */
 public class PdvAgent {
 	private static Logger LOGGER = LoggerFactory.getLogger(PdvAgent.class);
-
-	private static final SimpleDateFormat SDF_YYMMDDHHMMSSSSS = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
 	public static final Properties APPLICATION;
 	
@@ -67,21 +65,23 @@ public class PdvAgent {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		LOGGER.info("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
 		LOGGER.info("Inicializando...");
 
 		LOGGER.info("groupId: " + APPLICATION.getProperty("groupId"));
-		LOGGER.info("artifactId: " + APPLICATION.getProperty("artifactId"));
-		LOGGER.info("version: " + APPLICATION.getProperty("version"));
+		LOGGER.info("artifactId: " + APPLICATION.getProperty("artifactId")+"\tversion: " + APPLICATION.getProperty("version"));
 		
 		// Obter as informações do PDV
 		String idZabbixPdv = getIdZabbixPdv();
-		String ip = getIp();// IP
-		String hostName = getHostName(); // Hostname
-
-		// Hora da obtenção do status
-		Date horaAtual = new Date(System.currentTimeMillis());
-		String strDataHora = SDF_YYMMDDHHMMSSSSS.format(horaAtual);
+		if(idZabbixPdv == null) {
+			LOGGER.error("Falha ao obter o Hostname do arquivo do Zabbix!");
+			LOGGER.info("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+			System.exit(1);
+		}
 		
+		String ip = getIp();// IP
+		String hostName = getHostName(); // HostName
+
 		// Código da Loja
 		String codLoja = null;
 		// Numero da loja
@@ -95,80 +95,45 @@ public class PdvAgent {
 			sistemaOp = id[2];
 		}
 		
-		// Cidade
-		// Estado
-
-		// Verificar se é Tauros
-				
-		// Verificar se é principal, ou se é estação (Tauros SP ou pdv normal)
-
-		// Se for Tauros (Tauros), obter a versão e a data de atualização
-		/*
-		 * if(isTauros()) { obter versão obter data de atualização } else { //É
-		 * sispac // nem sei o que colocar }
-		 */
-		// Versão do PDV Status
-System.out.println(isTaurosSP());
 		// Popular o objeto PdvStatus com as informações para enviar ao Zabbix
 		PdvStatus pdvStatus = new PdvStatus();
-		pdvStatus.setIdZabbixPdv(idZabbixPdv);// Adicionando o Prefixo PDV ao ID
+		pdvStatus.setIdZabbixPdv(idZabbixPdv);
 		pdvStatus.setIp(ip);
 		pdvStatus.setHostName(hostName);
 		pdvStatus.setCodLoja(codLoja);
 		pdvStatus.setNumPdv(numPdv);
 		pdvStatus.setSistemaOp(sistemaOp);
+
+		// Versão do PDV Status
 		pdvStatus.setVersaoPdvStatus(APPLICATION.getProperty("version"));
+
 		//Tipo PDV Tauros (SP ou ESTACAO)
-		//Versão do Tauros
+		if(isTaurosSP()) {
+			pdvStatus.setTipoPdvTauros(TipoPdvEnum.SP);
+		} else if(isTaurosEstacao()) {
+			pdvStatus.setTipoPdvTauros(TipoPdvEnum.ESTACAO);
+		}
+
 		//Tipo PDV Sispac (PRINCIPAL ou ESTACAO)
+		if(isSispacPrincipal()) {
+			pdvStatus.setTipoPdvSispac(TipoPdvEnum.PRINCIPAL);
+		} else if(isSispacEstacao()) {
+			pdvStatus.setTipoPdvSispac(TipoPdvEnum.ESTACAO);
+		}
+		
+		//Versão do Tauros
+		
 		//Versão do Sispac
+		
+		// Hora da obtenção do status
+		Date horaAtual = new Date(System.currentTimeMillis());
 		pdvStatus.setHoraAtual(horaAtual);
 		
 		// Enviar o status do pdv para o zabbix (usar classe ZabbixUtil
 		ZabbixUtil.saveZabbixFile(pdvStatus);
-	}
-
-	/**
-	 * @deprecated Remover esse método
-	 */
-	public static void testNetwork() {
-		try {
-			System.out.println("Your Host addr: " + InetAddress.getLocalHost().getHostAddress());
-
-			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-			for (; networkInterfaces.hasMoreElements();) {
-				NetworkInterface e = networkInterfaces.nextElement();
-
-				Enumeration<InetAddress> inetAddresses = e.getInetAddresses();
-				for (; inetAddresses.hasMoreElements();) {
-					InetAddress addr = inetAddresses.nextElement();
-					System.out.println(e.getDisplayName() + "\t" + addr.getHostAddress());
-				}
-			}
-
-			String hostname = "";
-			try {
-				hostname = InetAddress.getLocalHost().getHostName();
-			} catch (UnknownHostException e) {
-				// failed; try alternate means.
-			}
-
-			// try environment properties.
-			//
-			String host = System.getenv("COMPUTERNAME");
-			if (host != null) {
-				hostname = host;
-			}
-			host = System.getenv("HOSTNAME");
-			if (host != null) {
-				hostname = host;
-			}
-
-			// undetermined.
-			System.out.println(hostname);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
+		
+		LOGGER.info("Fim!");
+		LOGGER.info("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 	}
 
 	/**
@@ -200,19 +165,15 @@ System.out.println(isTaurosSP());
 				} else {
 					LOGGER.error("Não é possível ler o arquivo: " + ZABBIX_FILE);
 				}
-//				FileInputStream fis = new FileInputStream(fileZabbix);
-//				fis.
 			} else {
 				LOGGER.error("O arquivo " + ZABBIX_FILE + " NÃO EXISTE!");
 			}
 			
-			
-			// Se abriu, procurar pela chave "Hostname"
 		} catch(Exception e) {
 			LOGGER.error(e.getMessage(), e);
 		}
 		
-		LOGGER.debug("idZabbixPdv: " + idZabbixPdv);
+		LOGGER.info("idZabbixPdv: " + idZabbixPdv);
 		return idZabbixPdv;
 	}
 	
@@ -224,10 +185,10 @@ System.out.println(isTaurosSP());
 		String hostName = "";
 		try {
 			hostName = InetAddress.getLocalHost().getHostName();
-			LOGGER.info("HostName: " + hostName);
 		} catch (UnknownHostException e) {
 			LOGGER.error(e.getMessage(), e);
 		}
+		LOGGER.info("HostName: " + hostName);
 		return hostName;
 	}
 
@@ -259,7 +220,7 @@ System.out.println(isTaurosSP());
 						if (RegexUtil.isValidIp(ia.getHostAddress())) {
 							// É válido, armazena da variável ip e para o loop
 							ip = ia.getHostAddress();
-							LOGGER.info("IP válido: " + ip);
+							LOGGER.debug("IP válido: " + ip);
 							achouIpValido = true;
 							break;
 						}
@@ -276,6 +237,7 @@ System.out.println(isTaurosSP());
 			LOGGER.error(e.getMessage(), e);
 		}
 
+		LOGGER.info("IP: " + ip);
 		return ip;
 	}
 	
@@ -297,4 +259,35 @@ System.out.println(isTaurosSP());
 		return isTaurosSP;	
 	}
 	
+	public static boolean isTaurosEstacao(){
+		boolean isTaurosEstacao = false;		
+		
+		try {
+			File taurosDir = new File(PATH_TAUROS_ESTACAO);
+			if (taurosDir.isDirectory()) {	
+				LOGGER.debug("O diretório " + PATH_TAUROS_ESTACAO + " existe!");
+				isTaurosEstacao = true;
+			}
+			
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+		}
+		
+		LOGGER.info("isTaurosEstacao: " + isTaurosEstacao);
+		return isTaurosEstacao;	
+	}
+	
+	public static boolean isSispacPrincipal() {
+		boolean is = false;
+		
+		LOGGER.info("isSispacPrincipal: " + is);
+		return is;
+	}
+	
+	public static boolean isSispacEstacao() {
+		boolean is = false;
+		
+		LOGGER.info("isSispacEstacao: " + is);
+		return is;
+	}
 }
