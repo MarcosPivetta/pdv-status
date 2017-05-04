@@ -74,7 +74,9 @@
 					<skipStaging>true</skipStaging>
 				</configuration>
 			</plugin>
-		</plugins>
+  		</plugins>
+  		
+  		<testSourceDirectory>src/main/test/</testSourceDirectory>
 	</build>
 
 	<distributionManagement>
