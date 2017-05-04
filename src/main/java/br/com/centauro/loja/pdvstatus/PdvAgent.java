@@ -68,10 +68,14 @@ public class PdvAgent {
 			System.exit(1);
 		}
 		
-		String ip = NetworkUtil.getIp();// IP
-		String hostName = NetworkUtil.getHostName(); // HostName
-		TipoPdvEnum tipoPdvEnum = TaurosUtil.getTipoTauros();
-		
+		// IP
+		String ip = NetworkUtil.getIp();
+		// HostName
+		String hostName = NetworkUtil.getHostName(); 
+		// Tipo Tauros
+		TipoPdvEnum tipoTauros = TaurosUtil.getTipoTauros();
+		// Tipo Tauros
+		TipoPdvEnum tipoSispac = SispacUtil.getTipoSispac();
 		// Código da Loja
 		String codLoja = "ERRO";
 		// Numero da loja
@@ -92,10 +96,20 @@ public class PdvAgent {
 		// Popular o objeto PdvStatus com as informações para enviar ao Zabbix
 		PdvStatus pdvStatus = new PdvStatus();
 		pdvStatus.setIdZabbixPdv(idZabbixPdv);
+
+		// IP da estação
 		pdvStatus.setIp(ip);
+		
+		// Hostname da estação
 		pdvStatus.setHostName(hostName);
+		
+		// Código da loja
 		pdvStatus.setCodLoja(codLoja);
+		
+		// Numero da loja
 		pdvStatus.setNumPdv(numPdv);
+		
+		// Sistema Operacional da estação
 		pdvStatus.setSistemaOp(sistemaOp);
 
 		// Versão do PDV Status
@@ -108,14 +122,10 @@ public class PdvAgent {
 		pdvStatus.setVersaoSispac(SispacUtil.getVersaoSispac());
 
 		// Tipo PDV Tauros (SP ou ESTACAO)
-		pdvStatus.setTipoPdvTauros(tipoPdvEnum);
+		pdvStatus.setTipoPdvTauros(tipoTauros);
 
 		// Tipo PDV Sispac (PRINCIPAL ou ESTACAO)
-		if(SispacUtil.isSispacPrincipal()) {
-			pdvStatus.setTipoPdvSispac(TipoPdvEnum.PRINCIPAL);
-		} else if(SispacUtil.isSispacEstacao()) {
-			pdvStatus.setTipoPdvSispac(TipoPdvEnum.ESTACAO);
-		}
+		pdvStatus.setTipoPdvSispac(tipoSispac);
 		
 		// Hora da obtenção do status
 		Date horaAtual = new Date(System.currentTimeMillis());
