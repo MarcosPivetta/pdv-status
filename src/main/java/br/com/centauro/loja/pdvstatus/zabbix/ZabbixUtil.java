@@ -86,7 +86,7 @@ public abstract class ZabbixUtil {
     				.append(PRFX).append(" ").append("DataHoraStatus ").append(SDF_DATE_TIME.format(pdvStatus.getHoraAtual())).append(LF);
     				;
     
-    				LOGGER.debug("Zabbix file content ------------\n"+content);
+    		LOGGER.debug("Zabbix file content ------------\n"+content);
     		String absolutePath = writeFile(content);
     		
     		if(null == absolutePath) {
