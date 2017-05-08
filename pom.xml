@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.com.centauro.loja</groupId>
 	<artifactId>pdv-status</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0-RC1</version>
 	<name>pdv-status</name>
 	<url>http://maven.apache.org</url>
 
