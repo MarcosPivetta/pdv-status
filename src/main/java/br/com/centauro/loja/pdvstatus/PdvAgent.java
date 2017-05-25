@@ -119,7 +119,7 @@ public class PdvAgent {
 		pdvStatus.setVersaoTauros(TaurosUtil.getVersaoTauros());
 
 		// Versão do Sispac
-		pdvStatus.setVersaoSispac(SispacUtil.getVersaoSispac());
+//		pdvStatus.setVersaoSispac(SispacUtil.getVersaoSispac());
 
 		// Tipo PDV Tauros (SP ou ESTACAO)
 		pdvStatus.setTipoPdvTauros(tipoTauros);

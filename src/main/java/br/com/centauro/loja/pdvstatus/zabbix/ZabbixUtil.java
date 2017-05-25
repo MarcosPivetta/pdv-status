@@ -80,7 +80,7 @@ public abstract class ZabbixUtil {
     				.append(PRFX).append(" ").append("SitemaOp ").append(pdvStatus.getSistemaOp()).append(LF)
     				.append(PRFX).append(" ").append("VersaoPdvStatus ").append(pdvStatus.getVersaoPdvStatus()).append(LF)
     				.append(PRFX).append(" ").append("VersaoTauros ").append(pdvStatus.getVersaoTauros()).append(LF)
-    				.append(PRFX).append(" ").append("VersaoSispac ").append(pdvStatus.getVersaoSispac()).append(LF)
+//    				.append(PRFX).append(" ").append("VersaoSispac ").append(pdvStatus.getVersaoSispac()).append(LF)
     				.append(PRFX).append(" ").append("TipoPDVTauros ").append(pdvStatus.getTipoPdvTauros()).append(LF)
     				.append(PRFX).append(" ").append("TipoPDVSispac ").append(pdvStatus.getTipoPdvSispac()).append(LF)
     				.append(PRFX).append(" ").append("DataHoraStatus ").append(SDF_DATE_TIME.format(pdvStatus.getHoraAtual())).append(LF);
