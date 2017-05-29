@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.com.centauro.loja.pdvstatus.model.PdvStatus;
+import br.com.centauro.loja.pdvstatus.util.DateTimeutil;
 
 /**
  * Classe utilitária utilizada para enviar informações pelo zabbix_sender
@@ -83,7 +84,7 @@ public abstract class ZabbixUtil {
 //    				.append(PRFX).append(" ").append("VersaoSispac ").append(pdvStatus.getVersaoSispac()).append(LF)
     				.append(PRFX).append(" ").append("TipoPDVTauros ").append(pdvStatus.getTipoPdvTauros()).append(LF)
 //    				.append(PRFX).append(" ").append("TipoPDVSispac ").append(pdvStatus.getTipoPdvSispac()).append(LF)
-    				.append(PRFX).append(" ").append("DataHoraStatus ").append(SDF_DATE_TIME.format(pdvStatus.getHoraAtual())).append(LF);
+    				.append(PRFX).append(" ").append("DataHoraStatus ").append(DateTimeutil.getUnixTimestamp(pdvStatus.getHoraAtual())).append(LF);
     				;
     
     		LOGGER.debug("Zabbix file content ------------\n"+content);
