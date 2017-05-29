@@ -24,7 +24,6 @@ import br.com.centauro.loja.pdvstatus.util.DateTimeutil;
  * @author juliano
  */
 public abstract class ZabbixUtil {
-
 	private static Logger LOGGER = LoggerFactory.getLogger(ZabbixUtil.class);
 
 	private static final String PDV = "PDV";
@@ -78,7 +77,7 @@ public abstract class ZabbixUtil {
     				.append(PRFX).append(" ").append("HostName ").append(pdvStatus.getHostName()).append(LF)
     				.append(PRFX).append(" ").append("CodLoja ").append(pdvStatus.getCodLoja()).append(LF)
     				.append(PRFX).append(" ").append("NumPDV ").append(pdvStatus.getNumPdv()).append(LF)
-    				.append(PRFX).append(" ").append("SitemaOp ").append(pdvStatus.getSistemaOp()).append(LF)
+    				.append(PRFX).append(" ").append("SistemaOp ").append(pdvStatus.getSistemaOp()).append(LF)
     				.append(PRFX).append(" ").append("VersaoPdvStatus ").append(pdvStatus.getVersaoPdvStatus()).append(LF)
     				.append(PRFX).append(" ").append("VersaoTauros ").append(pdvStatus.getVersaoTauros()).append(LF)
 //    				.append(PRFX).append(" ").append("VersaoSispac ").append(pdvStatus.getVersaoSispac()).append(LF)

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.centauro.loja.pdvstatus.model.PdvStatus;
 import br.com.centauro.loja.pdvstatus.type.TipoPdvEnum;
+import br.com.centauro.loja.pdvstatus.util.LinuxUtil;
 import br.com.centauro.loja.pdvstatus.util.NetworkUtil;
 import br.com.centauro.loja.pdvstatus.util.SispacUtil;
 import br.com.centauro.loja.pdvstatus.util.TaurosUtil;
@@ -81,13 +82,13 @@ public class PdvAgent {
 		// Numero da loja
 		String numPdv = "ERRO";
 		// Sistema Operacional
-		String sistemaOp = "ERRO";
+		String sistemaOp = LinuxUtil.getSistemaOperacional();
+		
 		try {
 			if(idZabbixPdv != null && !"".equals(idZabbixPdv)) {
 				String[] id = idZabbixPdv.split("-");
 				codLoja = id[0];
 				numPdv = id[1];
-				sistemaOp = id[2];
 			}
 		} catch(Exception e) {
 			LOGGER.error("Falha ao converter o idZabbix no codigo da loja, ou numPdv ou Sistema Operacional.", e);
