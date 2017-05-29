@@ -73,15 +73,15 @@ public abstract class ZabbixUtil {
 			final String PRFX = PDV+pdvStatus.getIdZabbixPdv();
 			
     		StringBuilder content = new StringBuilder()
-    				.append(PRFX).append(" ").append("Ip ").append(pdvStatus.getIp()).append(LF)
-    				.append(PRFX).append(" ").append("HostName ").append(pdvStatus.getHostName()).append(LF)
-    				.append(PRFX).append(" ").append("CodLoja ").append(pdvStatus.getCodLoja()).append(LF)
-    				.append(PRFX).append(" ").append("NumPDV ").append(pdvStatus.getNumPdv()).append(LF)
+    				.append(PRFX).append(" ").append("Ip ").append(ASPAS).append(pdvStatus.getIp()).append(ASPAS).append(LF)
+    				.append(PRFX).append(" ").append("HostName ").append(ASPAS).append(pdvStatus.getHostName()).append(ASPAS).append(LF)
+    				.append(PRFX).append(" ").append("CodLoja ").append(ASPAS).append(pdvStatus.getCodLoja()).append(ASPAS).append(LF)
+    				.append(PRFX).append(" ").append("NumPDV ").append(ASPAS).append(pdvStatus.getNumPdv()).append(ASPAS).append(LF)
     				.append(PRFX).append(" ").append("SistemaOp ").append(pdvStatus.getSistemaOp()).append(LF)
-    				.append(PRFX).append(" ").append("VersaoPdvStatus ").append(pdvStatus.getVersaoPdvStatus()).append(LF)
-    				.append(PRFX).append(" ").append("VersaoTauros ").append(pdvStatus.getVersaoTauros()).append(LF)
+    				.append(PRFX).append(" ").append("VersaoPdvStatus ").append(ASPAS).append(pdvStatus.getVersaoPdvStatus()).append(ASPAS).append(LF)
+    				.append(PRFX).append(" ").append("VersaoTauros ").append(ASPAS).append(pdvStatus.getVersaoTauros()).append(ASPAS).append(LF)
 //    				.append(PRFX).append(" ").append("VersaoSispac ").append(pdvStatus.getVersaoSispac()).append(LF)
-    				.append(PRFX).append(" ").append("TipoPDVTauros ").append(pdvStatus.getTipoPdvTauros()).append(LF)
+    				.append(PRFX).append(" ").append("TipoPDVTauros ").append(ASPAS).append(pdvStatus.getTipoPdvTauros()).append(ASPAS).append(LF)
 //    				.append(PRFX).append(" ").append("TipoPDVSispac ").append(pdvStatus.getTipoPdvSispac()).append(LF)
     				.append(PRFX).append(" ").append("DataHoraStatus ").append(DateTimeutil.getUnixTimestamp(pdvStatus.getHoraAtual())).append(LF);
     				;
